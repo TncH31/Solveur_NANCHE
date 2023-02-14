@@ -1,6 +1,6 @@
 package fr.rodez3il.a2022.mrmatt.solveur;
 
-import fr.rodez3il.a2022.mrmatt.sources.Niveau;
+import fr.rodez3il.a2022.mrmatt.sourcespartielles.Niveau;
 
 public class Solveur {
 
