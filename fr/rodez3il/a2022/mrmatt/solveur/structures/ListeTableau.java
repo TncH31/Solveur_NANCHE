@@ -20,6 +20,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+   *@autor Nanche Thibaud
    * Ajoute un élément à la liste.
    * 
    * @param element l'élément à ajouter
@@ -34,6 +35,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+   *@autor Nanche Thibaud
    * Elle crée un nouveau tableau de taille deux fois plus grande que le tableau 
    *actuel,
    *puis copie tous les éléments du tableau actuel dans le nouveau tableau.
@@ -50,6 +52,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+   *@autor Nanche Thibaud
    * Indique si la liste est vide.
    * 
    * @return true si la liste est vide.
@@ -60,6 +63,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+   *@autor Nanche Thibaud
    * Indique la taille de la liste.
    * 
    * @return La taille de la liste.
@@ -70,6 +74,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+   *@autor Nanche Thibaud
    * Enlève (et retourne) l'élément à la position i.
    * 
    * @param i la position de l'élément.
@@ -95,6 +100,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+   *@autor Nanche Thibaud
    * Renvoie l'élément à la position i.
    * 
    * @param i la position de l'élément
@@ -111,6 +117,7 @@ public class ListeTableau<E> implements Liste<E> {
   }
 
   /**
+  *@autor Nanche Thibaud
   *Indique si un élément équivalent à celui passé en paramètre est présent dans la 
   *liste.
   *par leur méthode equals.
