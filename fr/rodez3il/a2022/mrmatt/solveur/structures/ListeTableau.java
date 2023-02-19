@@ -1,100 +1,129 @@
 package fr.rodez3il.a2022.mrmatt.solveur.structures;
 
-import java.util.Arrays;
+public class ListeTableau<E> implements Liste<E> {
 
-public class ListeTableau<T> implements Liste<T> {
+  // Constante pour la capacité original du tableau
+  private static final int originalSize = 10;
 
-  private T[] tableau;
-  private int tailleTableau = 0;
-  private tailleOccuppee = 0;
+  // tableau d'objet
+  private E[] tab;
+  // taille du tableau;
+  private int taille;
 
-  public ListeTableau(int T){
-    this.tableau = new Object[T];
+  public ListeTableau() {
+    this.tab = (E[]) (new Object[originalSize]);
+    /***
+    *La variable taille est initialisée à zéro car une liste vide est une liste 
+    *qui ne contient aucun élément.
+    ***/
+    this.taille = 0;
   }
 
   /**
-   * Description: Permet d'ajouter un element au tableau
+   * Ajoute un élément à la liste.
    * 
-   * @para Generique
-   * @autor Nanche Thibaud
-   **/
+   * @param element l'élément à ajouter
+   */
   @Override
-  void ajouter(T element) {
-    for (int i = 0; i < tableau.length; i++) {
-      if (tableau[i] == null) {
-        this.tailleOccuppe = i - 1;
+  public void ajouter(E element) {
+    if (this.taille == this.tab.length)
+      redimensionner();
 
+    this.tab[taille] = element;
+    this.taille++;
+  }
+
+  /**
+   * Elle crée un nouveau tableau de taille deux fois plus grande que le tableau 
+   *actuel,
+   *puis copie tous les éléments du tableau actuel dans le nouveau tableau.
+   *Enfin, elle remplace le tableau actuel par le nouveau tableau créé.
+   */
+  private void redimensionner() {
+
+    E[] NouveauTab = (E[]) (new Object[this.tab.length * 2]);
+
+    for (int i = 0; i < this.tab.length; i++)
+      NouveauTab[i] = this.tab[i];
+
+    this.tab = NouveauTab;
+  }
+
+  /**
+   * Indique si la liste est vide.
+   * 
+   * @return true si la liste est vide.
+   */
+  @Override
+  public boolean estVide() {
+    return this.taille == 0;
+  }
+
+  /**
+   * Indique la taille de la liste.
+   * 
+   * @return La taille de la liste.
+   */
+  @Override
+  public int taille() {
+    return this.taille;
+  }
+
+  /**
+   * Enlève (et retourne) l'élément à la position i.
+   * 
+   * @param i la position de l'élément.
+   * @return L'élément qui a été supprimé.
+   * @throws IndexOutOfBoundsException si l'index est invalide
+   */
+  @Override
+  public E enlever(int i) throws IndexOutOfBoundsException {
+    if (i < 0 || i >= taille) {
+      throw new IndexOutOfBoundsException("L'index spécifié est invalide.");
+    }
+
+    E elementSupprime = this.tab[i];
+
+    for (int j = i; j < this.taille - 1; j++) {
+      this.tab[j] = this.tab[j + 1];
+    }
+
+    this.tab[this.taille - 1] = null;
+    this.taille--;
+
+    return elementSupprime;
+  }
+
+  /**
+   * Renvoie l'élément à la position i.
+   * 
+   * @param i la position de l'élément
+   * @return L'élément à la position i
+   * @throws IndexOutOfBoundsException si l'index est invalide
+   */
+  @Override
+  public E element(int i) throws IndexOutOfBoundsException {
+    if (i < 0 || i >= taille) {
+      throw new IndexOutOfBoundsException("L'index spécifié est invalide.");
+    }
+
+    return this.tab[i];
+  }
+
+  /**
+  *Indique si un élément équivalent à celui passé en paramètre est présent dans la 
+  *liste.
+  *par leur méthode equals.
+  *@param element L'élément à comparer.
+  *@return true si un élément équivalent est présent dans la liste, false sinon.
+*/
+  @Override
+  public boolean contient(E e) {
+    for (int i = 0; i < this.taille; i++) {
+      if (this.tab[i] != null && this.tab[i].equals(e)) {
+        return true;
       }
     }
-
-  }
-
-  /**
-   * Description : Cette methode vérifie si le tableau est vide, si le tableau
-   * contient des trous mais au moins un élément il sera pris comme non vide.
-   * contient des trous !
-   * 
-   * @para vide
-   * @autor Nanche Thibaud
-   **/
-  @Override
-  boolean estVide() {
-    res = true;
-    for (int i = 0; i < tableau.length; i++) {
-      if (tableau[i] != null) {
-        return false;
-      }
-    }
-    return res;
-  }
-
-  /**
-   * Description
-   * 
-   * @para
-   * @autor Nanche Thibaud
-   **/
-  @Override
-  int taille() {
-    
-    tailleNewTable = tableau.length*2;
-    for(int i = 0; i < tailleNewTable; i++){
-      newTableau[i] = tableau[i];
-    }
-    
-  }
-
-  
-  /**
-   * Description
-   * 
-   * @para
-   * @autor Nanche Thibaud
-   **/
-  @Override
-  T enlever(int i) {
-
-  }
-
-  /**
-   * Description
-   * 
-   * @para
-   * @autor Nanche Thibaud
-   **/
-  @Override
-  T element(int i) {
-
-  }
-
-  /**
-   * Description
-   * 
-   * @para
-   * @autor Nanche Thibaud
-   **/
-  @Override
-  boolean contient(T e) {
-
-  }
+    return false;
+ }
 }
