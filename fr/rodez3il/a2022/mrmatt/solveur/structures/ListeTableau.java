@@ -13,6 +13,7 @@ public class ListeTableau<E> implements Liste<E> {
   public ListeTableau() {
     this.tab = (E[]) (new Object[originalSize]);
     /***
+     *@autor Nanche Thibaud
     *La variable taille est initialisée à zéro car une liste vide est une liste 
     *qui ne contient aucun élément.
     ***/

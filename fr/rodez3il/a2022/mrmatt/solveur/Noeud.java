@@ -6,17 +6,61 @@ import fr.rodez3il.a2022.mrmatt.solveur.structures.ListeTableau;
 import fr.rodez3il.a2022.mrmatt.Commande;
 import fr.rodez3il.a2022.mrmatt.Niveau;
 
+/**
+ * @author Nanche Thibaud
+ * Cette classe représente un noeud dans un arbre de recherche utilisé pour résoudre un problème.
+ */
 public class Noeud {
 
+    /**
+     * @author Nanche Thibaud
+     * Le dictionnaire qui associe une chaîne de caractères à un objet Noeud
+     */
     private final DictionnaireChaine<String, Noeud> conf;
+
+    /**
+     * L'état du niveau associé à ce noeud
+     */
     private final Niveau etatNiveau;
+
+    /**
+     * La liste des fils de ce noeud
+     */
     private final ListeTableau<Noeud> tableau_fils;
+
+    /**
+     * La séquence de commandes pour atteindre ce noeud
+     */
     private final String cmd;
+
+    /**
+     * Indique si ce noeud a été visité pendant la recherche
+     */
     private boolean EstVisite;
+
+    /**
+     * La séquence de commandes pour résoudre le problème à partir de ce noeud
+     */
     private String solution;
+
+    /**
+     * La séquence de commandes pour atteindre ce noeud
+     */
     private String suiteCommandes;
+
+    /**
+     * La représentation sous forme de chaîne de l'état du niveau associé à ce noeud
+     */
     private String donneesChaine;
 
+    /**
+     * @author Nanche Thibaud
+     * Constructeur de la classe Noeud.
+     *
+     * @param configuration le dictionnaire associant une chaîne de caractères à un objet Noeud
+     * @param etatDuNiveau  l'état du niveau associé à ce noeud
+     * @param commandes     la séquence de commandes pour atteindre ce noeud
+     */
     public Noeud(DictionnaireChaine<String, Noeud> configuration, Niveau etatDuNiveau, String commandes) {
         this.conf = configuration;
         this.etatNiveau = etatDuNiveau;
@@ -24,20 +68,45 @@ public class Noeud {
         this.cmd = commandes;
     }
 
+    /**
+     * @author Nanche Thibaud
+     * Indique si ce noeud a été visité pendant la recherche.
+     *
+     * @return true si ce noeud a été visité, false sinon
+     */
     public boolean estVisite() {
         return EstVisite;
     }
 
+    /**
+     * @author Nanche Thibaud
+     * Retourne la liste des fils de ce noeud.
+     *
+     * @return la liste des fils de ce noeud
+     */
     public ListeTableau<Noeud> getTableau_fils() {
         return tableau_fils;
     }
 
+    /**
+     * @author Nanche Thibaud
+     * Ajoute un fils à la liste des fils de ce noeud.
+     *
+     * @param fils le fils à ajouter
+     */
     public void ajouterFils(Noeud fils) {
         if (fils != null) {
             this.tableau_fils.ajouter(fils);
         }
     }
 
+    /**
+     * @author Nanche Thibaud
+     * Vérifie si ce noeud est égal à un autre objet.
+     *
+     * @param obj l'objet à comparer
+     * @return true si ce noeud est égal à l'objet, false sinon
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -50,62 +119,4 @@ public class Noeud {
         return etatNiveau.equals(other.etatNiveau) && tableau_fils.equals(other.tableau_fils) && cmd.equals(other.cmd)
                 && conf.equals(other.conf);
     }
-
-    public String calculerFils() {
-        EstVisite = true;
-        conf.inserer(etatNiveau.valeurChaine(), this);
-        for (Commande commande : Commande.values()) {
-            if (etatNiveau.deplacementPossible(commande) && etatNiveau.enCours()) {
-                suiteCommandes = cmd + " " + commande;
-                Niveau nouvelEtat = etatNiveau.copier();
-                nouvelEtat.deplacer(commande);
-                nouvelEtat.calcule();
-                boolean gagnant = nouvelEtat.estGagnant();
-                if (gagnant) {
-                    solution = suiteCommandes;
-                    return solution;
-                } else {
-                    donneesChaine = nouvelEtat.valeurChaine();
-                    if (conf.contient(donneesChaine)) {
-                        ajouterFils(conf.valeur(donneesChaine));
-                    } else {
-                        Noeud filsNoeud = new Noeud(conf, nouvelEtat, suiteCommandes);
-                        ajouterFils(filsNoeud);
-                        filsNoeud.calculerFils();
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
 }
-/***
- La classe Noeud représente un nœud dans un arbre de recherche.
- Les nœuds contiennent un état du jeu, une liste de nœuds enfants, une chaîne de commandes pour atteindre cet état
- et une référence à un dictionnaire qui mappe des chaînes d'état à des nœuds.
-
- Les méthodes et les champs publics de la classe Noeud sont les suivants :
-
- DictionnaireChaine<String, Noeud> conf : le dictionnaire utilisé pour stocker les nœuds.
- Niveau etat : l'état du jeu représenté par ce nœud.
- ListeTableau<Noeud> fils : la liste des nœuds enfants de ce nœud.
- String commandes : la chaîne de commandes utilisée pour atteindre cet état.
- boolean visite : un indicateur pour savoir si ce nœud a déjà été visité ou pas.
- String solution : la chaîne de commandes pour résoudre le jeu, si ce nœud représente un état gagnant.
- String suiteCommandes : la chaîne de commandes pour atteindre l'état représenté par ce nœud.
- String valChaine : la chaîne de l'état représenté par le nœud.
- Noeud(DictionnaireChaine<String, Noeud> config, Niveau etat, String commandes) : le constructeur de la classe Noeud.
- boolean estVisite() : retourne true si ce nœud a déjà été visité, false sinon.
- ListeTableau<Noeud> getFils() : retourne la liste des nœuds enfants de ce nœud.
- void ajouterFils(Noeud fils) : ajoute le nœud fils à la liste des nœuds enfants de ce nœud.
- boolean equals(Object obj) : retourne true si l'objet obj est égal à ce nœud, false sinon.
- String calculerFils() : calcule les nœuds enfants de ce nœud et retourne la chaîne de commandes pour résoudre
- le jeu si ce nœud représente un état gagnant, null sinon.
- La méthode calculerFils() est la plus importante de la classe Noeud.
- Elle calcule les nœuds enfants de ce nœud en parcourant toutes les commandes possibles et en créant de nouveaux
- nœuds pour chaque nouvel état du jeu résultant de l'application d'une commande.
- Si l'un des nouveaux nœuds représente un état gagnant, la méthode retourne la chaîne de commandes pour résoudre
- le jeu. Si tous les nouveaux nœuds représentent des états non gagnants, la méthode retourne null.
- La méthode utilise également le dictionnaire pour éviter de créer des nœuds pour des états qui ont déjà été visités.
- ***/
