@@ -1,4 +1,4 @@
-package fr.rodez3il.a2022.mrmatt.sourcespartielles;
+package fr.rodez3il.a2022.mrmatt;
 
 /**
  * Jeton pour les commandes possibles.
