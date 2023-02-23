@@ -1,8 +1,11 @@
+package fr.rodez3il.a2022.mrmatt.solveur.structures;
 /**
  * @author Nanche Thibaud
- *         Une implémentation de l'interface Dictionnaire basée sur une liste
- *         chaînée.
- *         Les clés et les valeurs sont de types génériques C et V.
+ * Je tiens à préciser que il y avait d'autre alternative plus simple
+ * comme import java.util.LinkedList;  :(
+ * Une implémentation de l'interface Dictionnaire basée sur une liste
+ * chaînée.
+ * Les clés et les valeurs sont de types génériques C et V.
  */
 public class DictionnaireChaine<C, V> implements Dictionnaire<C, V> {
 
@@ -11,7 +14,7 @@ public class DictionnaireChaine<C, V> implements Dictionnaire<C, V> {
    * Une entrée dans le dictionnaire qui associe une clé de type C et une
    * valeur de type V.
    */
-  private class Entree {
+  private class Entree<C,V> {
     private C cle;
     private V valeur;
 
@@ -26,24 +29,33 @@ public class DictionnaireChaine<C, V> implements Dictionnaire<C, V> {
       this.cle = cle;
       this.valeur = valeur;
     }
+
+    public C getCle() {
+      return cle;
+    }
+
+    public V getValeur() {
+      return valeur;
+    }
   }
 
-  // Une liste chaînée pour stocker les entrées du dictionnaire
-  private ListeChainee<Entree> liste = new ListeChainee<>();
+  /***
+   * Une liste chaînée pour stocker les entrées du dictionnaire
+   */
+  private ListeChainee<Entree<C,V>> liste = new ListeChainee<>();
+
+  private int tailleDictionnaire;
+
+
+  public DictionnaireChaine(ListeChainee<Entree<C, V>> liste) {
+    this.liste = liste;
+    this.tailleDictionnaire=0;
+  }
 
   /**
    * Redimensionne la liste en doublant sa capacité.
    */
-  private void redimensionner() {
-    int nouvelleCapacite = liste.taille() * 2;
-    ListeChainee<Entree> nouvelleListe = new ListeChainee<>(nouvelleCapacite);
 
-    for (Entree entree : liste) {
-      nouvelleListe.ajouter(entree);
-    }
-
-    liste = nouvelleListe;
-  }
 
   /**
    * @author Nanche Thibaud
@@ -54,15 +66,12 @@ public class DictionnaireChaine<C, V> implements Dictionnaire<C, V> {
    * @param valeur la valeur associée à la clé
    */
   @Override
-  public void inserer(C cle, V valeur) {
+  public void inserer(C cle, V valeur) throws IllegalArgumentException{
     Entree existante = null;
 
     // recherche d'une entrée existante avec la clé donnée
-    for (Entree entree : liste) {
-      if (entree.cle.equals(cle)) {
-        existante = entree;
-        break;
-      }
+    if(this.contient(cle)){
+      throw new IllegalArgumentException("La clé existe déjà ");
     }
 
     if (existante != null) {
@@ -83,12 +92,13 @@ public class DictionnaireChaine<C, V> implements Dictionnaire<C, V> {
    */
   @Override
   public boolean contient(C cle) {
-    for (Entree entree : liste) {
-      if (entree.cle.equals(cle)) {
-        return true;
+      boolean resultat =false;
+      for(int i = 0; i<this.tailleDictionnaire; i++){
+          if(this.liste.element(i).getCle().equals(cle)){
+             resultat=true;
+          }
       }
-    }
-    return false;
+      return resultat;
   }
 
   /**
@@ -102,11 +112,12 @@ public class DictionnaireChaine<C, V> implements Dictionnaire<C, V> {
    */
   @Override
   public V valeur(C cle) {
-    for (Entree entree : liste) {
-      if (entree.cle.equals(cle)) {
-        return entree.valeur;
+    V resultat = null;
+    for(int i = 0; i<this.tailleDictionnaire; i++){
+      if(this.liste.element(i).getCle().equals(cle)){
+        resultat=this.liste.element(i).getValeur();
       }
     }
-    return null;
+    return resultat;
   }
 }
